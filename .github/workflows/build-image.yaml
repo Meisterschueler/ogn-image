@@ -22,6 +22,7 @@ jobs:
         env:
           RemoteAdminUser: ogn-admin
           ExpandFilesystem: No
+          ImageVersion: ${{ github.ref_name }}
         with:
           image-name: ogn-install
           stage-list: stage0 stage1 stage2 ./phase1-ogn-software ./phase2-additional-tooling
