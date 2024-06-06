@@ -1,0 +1,8 @@
+# step 2: populate the blacklist to prevent claiming of the USB stick by the kernel
+cat >> /etc/modprobe.d/rtl-glidernet-blacklist.conf <<EOF
+blacklist rtl2832
+blacklist rtl2838
+blacklist r820t
+blacklist rtl2830
+blacklist dvb_usb_rtl28xxu
+EOF

@@ -1,0 +1,17 @@
+# step 3: compile special rtlsdr driver for Bias Tee
+TEMPDIR=$(mktemp -d)
+cd $TEMPDIR
+apt -y install git g++ gcc make cmake build-essential libconfig-dev libjpeg-dev libusb-1.0-0-dev
+git clone https://github.com/rtlsdrblog/rtl-sdr-blog
+cd rtl-sdr-blog
+cp rtl-sdr.rules /etc/udev/rules.d/rtl-sdr.rules
+mkdir build
+cd build
+cmake ../ -DINSTALL_UDEV_RULES=ON
+make install
+ldconfig
+
+# get rid of the old libraries
+apt -y remove --purge rtl-sdr
+apt -y autoremove
+cd $RUNPATH
