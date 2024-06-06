@@ -1,64 +1,45 @@
-### Note: as of may 1st 2023, the remote web console is no longer operational. Contact me you have any questions
+# ogn-image
 
-# ogn-install
+Automatically generate OGN image for Raspberry Pi (64bit OS)
 
-Install OGN software on a Raspberry Pi (all models). 
-
-Note: The generic OGN-pi image i created with this script can be found [here](https://drive.google.com/file/d/1P4IT78_i_FIv2Rtl5RsL8F1aWtVRKXJF/view?usp=sharing)
+This software is based on [ogn-install](https://github.com/petercreyghton/ogn-install) from Peter Creyghton
+that is based on [OGN-receiver-RPI-image](https://github.com/snip/OGN-receiver-RPI-image) from Sebastién Chaumontet.
+It is ported for the Github Action [pi-gen-action](https://github.com/usimd/pi-gen-action) that is a wrapper of the
+official Raspberry Pi image generator [pi-gen](https://github.com/RPi-Distro/pi-gen) that generates Raspberry Pi images from scratch.
 
 ## Installation basics
 
-- download latest RaspiOS from https://downloads.raspberrypi.org/raspios_lite_armhf/images/
-- clone this repository:  `git clone https://github.com/petercreyghton/ogn-install`
-- edit `/boot/ogn-install/OGN-receiver.conf` and set the required paramaters ReceiverName, Latitude, Longitude and piUserPassword
-
-- mount the image and copy `/ogn-install` to `/boot/`
-- for headless installation: edit `wpa_supplicant.conf` and copy it to `/boot`
-- create an empty `/boot/ssh` file to enable SSH access
-- flash the RaspiOS image to an SD card
-
+- get the latest image and unzip it
+- flash the image to an SD card
+- edit `OGN-receiver.conf` and set the required paramaters ReceiverName, Latitude, Longitude and piUserPassword
 - boot a Raspberry Pi with the flashed SD card
-- log in as user pi and run these commands:
+- log in as user pi to check the status of the receiver
 
-```
-sudo -i
-cd /boot/ogn-install
-./install.sh
-```
+## Current state
 
-After installation, the Pi reboots. Log in to check the status of the receiver.
+The original software installation process has two phases that contains multiple steps. The current state of the migration of these steps is:
 
-## Easy Access
+Phase 1 (OGN software)
+- [x] install prerequisites
+- [ ] ~~populate the blacklist~~
+- [x] compile special rtlsdr-driver
+- [x] get the OGN executables
+- [x] prepare executables
+- [x] get WW15MGH.DAC
+- [x] move configuration file to FAT32
+- [x] install service
+- [x] additional tools (telnet, lynx) (this step was not in the script...)
 
-This version of ogn-install includes easy access to the Pi via web console and ssh through a secure reverse tunnel.
-
-Try `ssh pi@remotelysecu.re` to log in with SSH or browse to http://remotelysecu.re to access your Pi without an SSH program.
-
-In short, Easy Access eliminates searching for the ip address of that headless receiver that's way up high near the antenna. Access is provided by a cloudserver which restricts Pi access to computers on your local network. So that's pretty secure, even without TLS.
-
-If you don't want to access the Pi via Easy Access you can disable it by entering:
-
-```
-systemctl disable --now remotelysecure-client.service
-
-```
-
-Additionally you can disable the remote admin user in OGN-receiver.conf (RemoteAdminEnabled="NO")
-
-
-# Screenshot 
-
-Here's a screenshot of my test receiver:
-
-![Screenshot RemotelySecu.re](https://github.com/petercreyghton/ogn-install/blob/master/Screenshot%202021-03-30%20at%2020.48.34.png)
-Yep! That's a screenshot of the Easy Access webpage, available only from the same network the Pi is attached to. 
-
-# Plans
-
-## Remote access
-
-For a future release, plans are to implement remote access to the receiver with a public ssh key and a generated accountname based on the receiver's station name. This is still work in progress, as it should be more than remotely secure ;-)
-
-## Remote Assistance
-
-As with the OGN image from Sebastién Chaumontet, a remote admin account is created in preparation of a form of remote assistance. Actual remote assistance is not provided as of yet.
+Phase 2 (Additional tooling)
+- [x] add a nightly reboot
+- [ ] ~~set global aliases~~
+- [x] configure watchdog 
+- [x] disable swap 
+- [x] disable fake hwclock
+- [ ] make the filesystem readonly
+- [ ] create user account for remote Admin access
+- [x] show receiver status on login
+- [ ] ~~setup a reverse tunnel to remotelysecu.re~~
+- [ ] enable Wifi on all platforms
+- [ ] final step
+- [x] debugging (this step was not in the script...)
