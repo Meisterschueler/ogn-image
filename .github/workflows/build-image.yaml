@@ -27,6 +27,8 @@ jobs:
           image-name: ogn-install
           enable-ssh: 1
           stage-list: stage0 stage1 stage2 ./phase1-ogn-software ./phase2-additional-tooling
+          password: raspberry
+          disable-first-boot-user-rename: 1
 
       - name: Upload image
         uses: actions/upload-artifact@v4
