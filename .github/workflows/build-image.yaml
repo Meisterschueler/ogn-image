@@ -1,0 +1,25 @@
+name: ogn-install
+run-name: ${{ github.actor }} is building a RPi image
+on:
+  push:
+    branches:
+      - pi-gen-action
+jobs:
+  pi-gen-upload-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build RPi image
+        uses: usimd/pi-gen-action@v1
+        id: build
+        with:
+          image-name: ogn-install
+          stage-list: stage0 stage1 stage2
+
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+        with:
+          name: ogn-install
+          path: ${{ steps.build.outputs.image-path }}
