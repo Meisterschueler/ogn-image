@@ -13,5 +13,5 @@ jobs:
           image-name: minimal-example
           stage-list: stage0 stage1 stage2
           release: buster
-          pi-gen-version: 2023-05-03-raspios-buster
+          pi-gen-version: buster
           verbose-output: true
