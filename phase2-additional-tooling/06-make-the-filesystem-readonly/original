@@ -1,0 +1,9 @@
+# step 6: make the filesystem readonly to protect the SDcard from wear
+cd /sbin
+wget https://github.com/ppisa/rpi-utils/raw/master/init-overlay/sbin/init-overlay
+wget https://github.com/ppisa/rpi-utils/raw/master/init-overlay/sbin/overlayctl
+chmod +x init-overlay overlayctl
+mkdir -p /overlay
+overlayctl install
+cd -
+overlayctl enable

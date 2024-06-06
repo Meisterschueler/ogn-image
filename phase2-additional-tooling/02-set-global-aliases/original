@@ -1,0 +1,4 @@
+# step 2: set global aliases
+cat > /etc/profile.d/aliases-global.sh <<-EOF
+alias ll='ls -l'
+EOF
