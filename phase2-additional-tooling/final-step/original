@@ -1,0 +1,19 @@
+echo
+echo "OGN receiver will now reboot to complete installation."
+echo
+
+# Final step: optionally auto expand image to SDcard size
+if [ -n "$ExpandFilesystem" ]; then
+  ENABLED=$(echo ${ExpandFilesystem^}|cut -c1)
+  if [ "$ENABLED" == "Y" ]; then 
+    # expand the filesystem to the size of the SD card
+    # Note: defaults to "NO" to save installation time
+    /usr/lib/raspi-config/init_resize.sh
+  fi
+fi
+# reboot to activate read-only filesystem
+if [ -e /boot/pix ]; then
+  touch /boot/pix/reboot
+else
+  reboot
+fi

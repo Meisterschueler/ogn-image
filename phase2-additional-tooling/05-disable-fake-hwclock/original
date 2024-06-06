@@ -1,0 +1,2 @@
+# step 5: disable fake hwclock
+update-rc.d fake-hwclock disable

@@ -1,0 +1,4 @@
+# step 10: enable Wifi on all platforms
+for filename in /var/lib/systemd/rfkill/*:wlan ; do
+  echo 0 > $filename
+done

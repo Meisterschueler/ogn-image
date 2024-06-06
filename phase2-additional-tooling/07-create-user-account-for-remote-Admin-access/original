@@ -1,0 +1,20 @@
+# step 7: create user account for remote Admin access
+# NOTE: Only required if you want remote assistence setting up and troubleshooting your 
+#       receiver installation. The account is enabled or disabled at boot time by 
+#       the setting of 'RemoteAdminEnabled' in /boot/OGN-receiver.conf 
+#
+#       Remove this step if your not comfortable with remote access. This will NOT
+#       disable the cloudservice for easy local access.
+#
+# create useraccount without password
+adduser --disabled-password --gecos "" $RemoteAdminUser
+usermod -aG sudo $RemoteAdminUser
+# make sure the remote admin user can sudo without password, because there's none set
+echo  "$RemoteAdminUser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+# create key pair (and create ~/.ssh)
+su - $RemoteAdminUser -c "ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa"
+# store a public key in ogn-admin
+cat ogn-admin.pub >> /home/$RemoteAdminUser/.ssh/authorized_keys 
+# set the correct permissions and owner
+chmod 600 /home/$RemoteAdminUser/.ssh/authorized_keys
+chown $RemoteAdminUser:$RemoteAdminUser /home/$RemoteAdminUser/.ssh/authorized_keys
