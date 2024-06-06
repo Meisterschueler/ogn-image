@@ -1,0 +1,14 @@
+# step 1: install prerequisites
+# first, wait for internet connection
+until ping -c1 -W2 1.1.1.1 &>/dev/null ; do  echo hoi; sleep 1; done
+#  get the correct time
+apt install -y ntpdate
+until ntpdate pool.ntp.org &>/dev/null; do 
+	echo "time not in sync"
+	sleep 1
+done
+# write the date in the version file
+sed -i "s/INSTALLDATE/$(date +%F)/" version 
+# next, install required packages
+apt update
+apt install -y ntp libjpeg8 libconfig9 fftw3-dev procserv lynx telnet dos2unix

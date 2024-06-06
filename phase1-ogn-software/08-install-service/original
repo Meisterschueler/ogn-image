@@ -1,0 +1,7 @@
+# step 8: install service
+cd /home/pi/rtlsdr-ogn
+cp -v rtlsdr-ogn /etc/init.d/rtlsdr-ogn
+sed -i 's/Template/\/etc\/ogn/g' rtlsdr-ogn.conf
+cp -v rtlsdr-ogn.conf /etc/rtlsdr-ogn.conf
+update-rc.d rtlsdr-ogn defaults
+cd -

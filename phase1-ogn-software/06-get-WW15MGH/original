@@ -1,0 +1,5 @@
+# step 6: get WW15MGH.DAC for conversion between the Height-above-Elipsoid to Height-above-Geoid thus above MSL
+# Note: Temporarily disabled, the file has moved and this break the installation
+# wget --no-check-certificate https://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/binary/WW15MGH.DAC
+# Provisionally copy a static version 
+cp WW15MGH.DAC /home/pi/rtlsdr-ogn
