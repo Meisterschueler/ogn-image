@@ -11,6 +11,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Make scripts executable
+        run: |
+            find "phase1-ogn-software" -type f -name "*.sh" -exec chmod +x {} \;
+
       - name: Build RPi image
         uses: usimd/pi-gen-action@v1
         id: build
@@ -19,7 +23,7 @@ jobs:
           ExpandFilesystem: No
         with:
           image-name: ogn-install
-          stage-list: stage0 stage1 stage2
+          stage-list: stage0 stage1 stage2 ./phase1-ogn-software
 
       - name: Upload image
         uses: actions/upload-artifact@v4
