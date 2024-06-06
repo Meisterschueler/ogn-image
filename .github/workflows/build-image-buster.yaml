@@ -28,6 +28,7 @@ jobs:
           stage-list: stage0 stage1 stage2
           release: buster
           pi-gen-version: 2023-05-03-raspios-buster
+          verbose-output: true
 
       - name: Upload image
         uses: actions/upload-artifact@v4
