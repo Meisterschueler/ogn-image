@@ -25,6 +25,7 @@ jobs:
           ImageVersion: ${{ github.ref_name }}
         with:
           image-name: ogn-install
+          enable-ssh: 1
           stage-list: stage0 stage1 stage2 ./phase1-ogn-software ./phase2-additional-tooling
 
       - name: Upload image
