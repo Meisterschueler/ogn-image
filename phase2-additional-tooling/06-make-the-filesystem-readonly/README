@@ -1,0 +1,3 @@
+### migration ###
+# The overlay needs the package 'overlayroot'
+# Configuration of overlay and boot read-only must be done with raspi-config
