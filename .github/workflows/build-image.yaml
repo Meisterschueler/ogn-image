@@ -1,4 +1,4 @@
-name: ogn-install
+name: ogn-image
 run-name: ${{ github.actor }} is building a RPi image
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
         uses: usimd/pi-gen-action@v1
         id: build
         with:
-          image-name: ogn-install
+          image-name: ogn-image
           enable-ssh: 1
           stage-list: stage0 stage1 stage2 ./phase1-ogn-software ./phase2-additional-tooling
           password: raspberry
@@ -41,7 +41,7 @@ jobs:
       - name: Upload image
         uses: actions/upload-artifact@v4
         with:
-          name: ogn-install
+          name: ogn-image
           path: ${{ steps.build.outputs.image-path }}
 
       - name: Release
