@@ -38,7 +38,7 @@ Phase 2 (Additional tooling)
 - [x] disable swap 
 - [x] disable fake hwclock
 - [x] make the filesystem readonly (for configuration 'raspi-config' is used)
-- [ ] create user account for remote Admin access
+- [x] create user account for remote Admin access (disabled, because I removed the public key)
 - [x] show receiver status on login
 - [ ] ~~setup a reverse tunnel to remotelysecu.re~~ (remotelysecu.re is shutdown)
 - [ ] enable Wifi on all platforms

@@ -26,6 +26,7 @@ jobs:
         run: |
           sed -i "s/REMOTEADMINUSER/$RemoteAdminUser/g" ./phase1-ogn-software/05-prepare-executables/files/OGN-receiver-config-manager2
           sed -i "s/REMOTEADMINUSER/$RemoteAdminUser/g" ./phase1-ogn-software/07-move-configuration-file-to-FAT32/files/OGN-receiver.conf
+          sed -i "s/REMOTEADMINUSER/$RemoteAdminUser/g" ./phase2-additional-tooling/07-create-user-account-for-remote-Admin-access/01-run-chroot.sh
           sed -i "s/IMAGEVERSION/$ImageVersion/g" ./phase2-additional-tooling/08-show-receiver-status-on-login/files/version
 
       - name: Build RPi image
