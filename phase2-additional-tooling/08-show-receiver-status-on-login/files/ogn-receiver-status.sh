@@ -29,20 +29,15 @@ fi
 # check RemoteAdminUser status
 if [ "$(sudo chage -l $RemoteAdminUser|grep 'Account expires'|cut -d':' -f2|sed 's/ //')" == "never" ]; then REMOTEADMIN="active"; else REMOTEADMIN="disabled"; fi
 
+# show the OGN logo
+cat /usr/share/ogn-receiver-status/ogn-logo-w80.txt
 
 # show the status page
 GREEN='\033[0;32m'
 YELLOW='\033[1;33'
 RED='\033[0;31m'
 NC='\033[0m'
-echo -n -e "${GREEN}"
-echo "     ____  _______   __                       _                  "
-echo "    / __ \/ ____/ | / /  ________  ________  (_)   _____  _____  "
-echo "   / / / / / __/  |/ /  / ___/ _ \/ ___/ _ \/ / | / / _ \/ ___/  "
-echo "  / /_/ / /_/ / /|  /  / /  /  __/ /__/  __/ /| |/ /  __/ /      "
-echo "  \____/\____/_/ |_/  /_/   \___/\___/\___/_/ |___/\___/_/       "
-echo -n -e "${NC}"
-echo
+
 # show receiver name or config message
 if [ -z $ReceiverName ]; then
     echo "      ERROR: NO CONFIGURATION FOUND"

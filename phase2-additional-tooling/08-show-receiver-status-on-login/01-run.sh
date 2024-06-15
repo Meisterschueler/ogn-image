@@ -7,6 +7,8 @@ export OGNVERSION=$(head -1 "${HOME_DIR}"/rtlsdr-ogn/Changelog)
 envsubst < files/version > "${HOME_DIR}"/version
 chown 1000:1000 "${HOME_DIR}"/version
 install -v -m 0644 files/ogn-receiver-status.sh "${ROOTFS_DIR}"/etc/profile.d/ogn-receiver-status.sh
+install -v -d 0755 "${ROOTFS_DIR}"/usr/share/ogn-receiver-status
+install -v -m 0644 files/ogn-logo-w80.txt "${ROOTFS_DIR}"/usr/share/ogn-receiver-status/ogn-logo-w80.txt
 
 # Install firstboot.service and firstboot.sh
 install -v -m 0644 files/firstboot.service "${ROOTFS_DIR}"/lib/systemd/system/firstboot.service
