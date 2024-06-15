@@ -37,7 +37,7 @@ Phase 2 (Additional tooling)
 - [x] configure watchdog 
 - [x] disable swap 
 - [x] disable fake hwclock
-- [ ] make the filesystem readonly (maybe use the option P2 from raspi-config?)
+- [ ] ~~make the filesystem readonly~~ (use the option 4 / P2 from raspi-config)
 - [ ] create user account for remote Admin access
 - [x] show receiver status on login
 - [ ] ~~setup a reverse tunnel to remotelysecu.re~~ (remotelysecu.re is shutdown)

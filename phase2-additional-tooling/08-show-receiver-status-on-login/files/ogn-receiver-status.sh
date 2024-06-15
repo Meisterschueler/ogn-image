@@ -19,12 +19,17 @@ RECEIVERSTATUS=$(sudo netstat -tlpn|grep 50010 &>/dev/null; if [ $? -eq 0 ]; the
 TUNNELSERVICE=$(systemctl is-active remotelysecure-client &>/dev/null; if [ $? -eq 0 ]; then echo "active"; else echo "disabled"; fi)
 # check web console status
 WEBCONSOLESTATUS=$(curl remotelysecu.re &>/dev/null; if [ $? -eq 0 ]; then echo "active"; else echo "unreachable"; fi)
+# get bootpartition read-only
+if [ $(raspi-config nonint get_bootro_now) -eq 0 ]; then
+    BOOTRO="read-only"
+else
+    BOOTRO="read-write"
+fi
 # get overlay status
-
-if [ $(overlayctl status|grep " active" &>/dev/null; echo $?) -eq 0 ]; then 
-    FSMODE="read-only"
-else 
-    FSMODE="read-write"
+if [ $(raspi-config nonint get_overlay_now) -eq 0 ]; then
+    OVERLAY="read-only"
+else
+    OVERLAY="read-write"
 fi
 # check RemoteAdminUser status
 if [ "$(sudo chage -l $RemoteAdminUser|grep 'Account expires'|cut -d':' -f2|sed 's/ //')" == "never" ]; then REMOTEADMIN="active"; else REMOTEADMIN="disabled"; fi
@@ -32,10 +37,10 @@ if [ "$(sudo chage -l $RemoteAdminUser|grep 'Account expires'|cut -d':' -f2|sed 
 # show the OGN logo
 cat /usr/share/ogn-receiver-status/ogn-logo-w80.txt
 
-# show the status page
-GREEN='\033[0;32m'
-YELLOW='\033[1;33'
-RED='\033[0;31m'
+# Define colors for the status page
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+RED='\033[1;31m'
 NC='\033[0m'
 
 # show receiver name or config message
@@ -62,27 +67,38 @@ else
     echo "        Web console status     $WEBCONSOLESTATUS"
     echo "        Remote admin user:     $REMOTEADMIN"
     echo
-    echo "        Filesystem:            $FSMODE"
+    echo "        Boot partition:        $BOOTRO"
+    echo "        File system:           $OVERLAY"
     echo
     if [ "$INTERNETSTATUS" == "OK" ]; then
       if [ "$OGNSTATUS" == "OK" ]; then
         if [ "$USBSTICKSTATUS" == "OK" ]; then
           if [ "$SERVICESTATUS" == "OK" ]; then
             if [ "$RECEIVERSTATUS" == "OK" ]; then
-              if [ "$FSMODE" == "read-only" ]; then
-                  echo -e "${GREEN}       Receiver is fully operational${NC}"
+              if [ "$BOOTRO" == "read-only" ]; then
+                if [ "$OVERLAY" == "read-only" ]; then
+                    echo -e "${GREEN}        Receiver is fully operational${NC}"
+                else
+                  echo -e "${YELLOW}        Receiver is operational. For maximal lifespan of your SDcard enter the"
+                  echo -e "        Rasberry Pi configuration with 'sudo raspi-config', go to"
+                  echo -e "        '4 Performance Options' and enable the overlay filesystem.${NC}"
+                fi
               else
-                echo -e "${YELLOW}        Receiver is operational. Type 'sudo overlayctl enable' and reboot"
-                echo -e "        for maximal lifespan of your SDcard${NC}"
+                echo -e "${YELLOW}        Receiver is operational. For maximal lifespan of your SDcard enter the"
+                echo -e "        Rasberry Pi configuration with 'sudo raspi-config', go to"
+                echo -e "        '4 Performance Options', make boot partition read-only and enable the"
+                echo -e "        overlay filesystem.${NC}"
               fi
             else
-              echo -e "${RED}        Receiver not operational, port 50010 not active. Did you reboot after install?${NC}"
+              echo -e "${RED}        Receiver not operational, port 50010 not active."
+              echo -e "        Did you reboot after install?${NC}"
             fi
           else
             echo -e "${RED}        Service rtlsdr-ogn not started. Did you reboot after install?${NC}"
           fi
         else
-          echo -e "${RED}        No USB stick detected, is the USB receiver dongle connected and supported?${NC}"
+          echo -e "${RED}        No USB stick detected, is the USB receiver dongle"
+          echo -e "        connected and supported?${NC}"
         fi
       else
         echo -e "${RED}        aprs.glidernet.org not responding.${NC}"
