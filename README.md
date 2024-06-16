@@ -44,3 +44,8 @@ Phase 2 (Additional tooling)
 - [ ] enable Wifi on all platforms
 - [ ] final step
 - [x] debugging (this step is new)
+
+# Screenshot
+
+Here's a screenshot of my test receiver:
+![Screenshot beta](https://github.com/Meisterschueler/ogn-image/blob/pi-gen-action/Bildschirmfoto%20vom%202024-06-16%2012-38-01.png)
