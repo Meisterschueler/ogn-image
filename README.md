@@ -28,7 +28,7 @@ Phase 1 (OGN software)
 - [x] get WW15MGH.DAC
 - [x] move configuration file to FAT32
 - [x] install service
-- [x] install time-sync-wait service (this step is new)
+- [x] install time-sync-wait service (this step is new, but disabled. This can block the system)
 - [x] additional tools (telnet, lynx) (this step is new)
 
 Phase 2 (Additional tooling)
