@@ -74,6 +74,7 @@ jobs:
         run: |
           sudo modprobe loop
           cd repository/src
+          echo "export BASE_ARCH=${BASE_ARCH}" >> config
           sudo bash -x ./build_dist "${VARIANT}"
 
       - name: Copy output

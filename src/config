@@ -1,0 +1,9 @@
+export DIST_NAME=ogn-image
+export DIST_VERSION=0.0.1
+
+export RPI_IMAGER_NAME="${DIST_NAME} version ${DIST_VERSION}"
+export RPI_IMAGER_DESCRIPTION="A distribution to an OpenGliderNetwork receiver"
+export RPI_IMAGER_WEBSITE="http://github.com/Meisterschueler/ogn-image"
+export RPI_IMAGER_ICON="https://raw.githubusercontent.com/guysoft/CustomPiOS/devel/media/rpi-imager-CustomPiOS.png"
+
+export MODULES="base(network,ogn-receiver)"
