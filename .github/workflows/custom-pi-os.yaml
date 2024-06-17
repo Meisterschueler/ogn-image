@@ -1,0 +1,92 @@
+name: ogn-image
+
+on:
+  push:
+    branches:
+      - CustomPiOS
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        name: [raspberrypi64-pi-2-3-4-5]
+        include:
+          - name: raspberrypi64-pi-2-3-4-5
+            base_arch: arm64
+            variant: default
+            url: https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2024-03-15/2024-03-15-raspios-bookworm-arm64-lite.img.xz
+            magic_path: "repository/src/image/2024-03-15-raspios-bookworm-arm64-lite.img.xz"
+
+    env:
+      IMG_NAME: ${{ matrix.name }}
+      BASE_ARCH: ${{ matrix.base_arch }}
+      VARIANT: ${{ matrix.variant }}
+      IMAGE_URL: ${{ matrix.url }}
+      MAGIC_PATH: ${{ matrix.magic_path }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: repository
+          submodules: true
+
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install --yes coreutils p7zip-full qemu-user-static
+
+      - name: Checkout CustomPiOS
+        uses: actions/checkout@v4
+        with:
+          repository: 'guysoft/CustomPiOS'
+          show-progress: false
+          path: CustomPiOS
+
+      - name: Update CustomPiOS Paths and create image directories
+        run: |
+          cd repository/src
+          ../../CustomPiOS/src/update-custompios-paths
+
+      - name: Download image
+        run: |
+          MAGIC_DIR=$(dirname "${MAGIC_PATH}")
+          mkdir -p "${MAGIC_DIR}"
+          wget -qO "${MAGIC_PATH}" "$IMAGE_URL"
+
+      - name: create a reasonable tag for this run - either a short sha or the tag we were called with
+        id: tag
+        run: |
+          export tag=""
+          export is_release="test"
+          if [ "${{ github.ref_type }}" = "tag" ] ; then tag="${{ github.ref_name }}" ; else tag="${{ github.sha }}" ; fi
+          if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] ; then is_release="release" ; fi
+          if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta ]] ; then is_release="beta" ; fi
+          export better_tag=$(echo $tag | sed -r 's/^(.{8}).{32}$/g-\1/')
+          echo "tag=${better_tag}" >> $GITHUB_OUTPUT
+          echo "is_release=${is_release}" >> $GITHUB_OUTPUT
+
+      - name: Build Image
+        id: build
+        run: |
+          sudo modprobe loop
+          cd repository/src
+          sudo bash -x ./build_dist "${VARIANT}"
+
+      - name: Copy output
+        run: |
+          cp ${{ github.workspace }}/repository/src/workspace/*.img ogn-image.img
+
+      - name: Zip Output
+        run: |
+          gzip ogn-image.img
+
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+        with:
+          name: ogn-image.img.gz
+          path: ogn-image.img.gz
+  
