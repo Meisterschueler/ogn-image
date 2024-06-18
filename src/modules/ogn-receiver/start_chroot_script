@@ -43,19 +43,19 @@ wget --no-check-certificate https://earth-info.nga.mil/GandG/wgs84/gravitymod/eg
 ln -s WW15MGH.DAC rtlsdr-ogn/WW15MGH.DAC
 
 ### Step 7
-unpack /filesystem/boot/OGN-receiver.conf /boot/OGN-receiver.conf
+unpack /filesystem/boot /boot
 
 ### PHASE 2 ###
 
 ### Step 8
 export OGNVERSION=$(head -1 "${HOME_DIR}"/rtlsdr-ogn/Changelog)
 
-unpack /filesystem/root/version /root/version
+unpack /filesystem/root /root
 envsubst < /root/version > /root/version.new && mv /root/version.new /root/version
-unpack /filesystem/etc/profile.d/ogn-receiver-status.sh /etc/profile.d/ogn-receiver-status.sh
+unpack /filesystem/etc/profile.d /etc/profile.d
 unpack /filesystem/usr/share/ogn-receiver-status /usr/share/ogn-receiver-status
 
 # Install firstboot.service and firstboot.sh
-unpack /filesystem/firstboot.service /lib/systemd/system/firstboot.service
-unpack /filesystem/firstboot.sh /boot/firstboot.sh
+unpack /filesystem/lib/systemd/system /lib/systemd/system
+unpack /filesystem/boot /boot
 envsubst < /boot/firstboot.sh > /boot/firstboot.sh.new && mv /boot/firstboot.sh.new /boot/firstboot.sh
