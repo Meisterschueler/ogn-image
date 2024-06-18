@@ -1,2 +1,39 @@
 #!/usr/bin/env bash
 set -ex
+
+apt update
+
+### Step 3
+# Get packages we need to run the rtlsdr driver
+apt install --yes git libusb-1.0-0-dev libconfig-dev
+
+# Get packages we need to build
+apt install -yes cmake debhelper dpkg-dev
+
+# Generate rtl-sdr package with modifications for "silver dongle" v3 and v4 from rtl-sdr.com
+git clone https://github.com/rtlsdrblog/rtl-sdr-blog --branch master --depth 1 --single-branch
+cd rtl-sdr-blog
+dpkg-buildpackage -b --no-sign
+cd ..
+dpkg -i librtlsdr0_*.deb
+dpkg -i librtlsdr-dev_*.deb
+dpkg -i rtl-sdr_*.deb
+
+# Remove build tools and artifacts
+rm -rf rtl-sdr-blog
+rm *.deb *.buildinfo *.changes
+apt remove --yes --purge --auto-remove cmake debhelper dpkg-dev
+
+### Step 4
+apt install --yes libfftw3-bin libpng16-16
+
+# Get the OGN binaries
+wget --no-check-certificate -qO- http://download.glidernet.org/arm64/rtlsdr-ogn-bin-arm64-latest.tgz | tar xvz
+
+
+### Step 5 TODO
+
+### Step 6
+# get WW15MGH.DAC for conversion between the Height-above-Elipsoid to Height-above-Geoid thus above MSL
+wget --no-check-certificate https://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/binary/WW15MGH.DAC
+ln -s WW15MGH.DAC rtlsdr-ogn/WW15MGH.DAC
