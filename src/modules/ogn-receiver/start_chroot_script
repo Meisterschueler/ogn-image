@@ -40,15 +40,23 @@ wget --no-check-certificate -qO- http://download.glidernet.org/arm64/rtlsdr-ogn-
 ### Step 6
 # get WW15MGH.DAC for conversion between the Height-above-Elipsoid to Height-above-Geoid thus above MSL
 wget --no-check-certificate https://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/binary/WW15MGH.DAC
-ln -s WW15MGH.DAC rtlsdr-ogn/WW15MGH.DAC
+ln -s WW15MGH.DAC /rtlsdr-ogn/WW15MGH.DAC
 
 ### Step 7
 unpack /filesystem/boot /boot
 
+### Step 8
+apt install --yes procserv
+
+cp /rtlsdr-ogn/rtlsdr-ogn /etc/init.d/rtlsdr-ogn
+sed -i 's/Template/\/etc\/ogn/g' /rtlsdr-ogn/rtlsdr-ogn.conf
+cp /rtlsdr-ogn/rtlsdr-ogn.conf /etc/rtlsdr-ogn.conf
+update-rc.d rtlsdr-ogn defaults
+
 ### PHASE 2 ###
 
 ### Step 8
-export OGNVERSION=$(head -1 "${HOME_DIR}"/rtlsdr-ogn/Changelog)
+export OGNVERSION=$(head -1 /rtlsdr-ogn/Changelog)
 
 unpack /filesystem/root /root
 envsubst < /root/version > /root/version.new && mv /root/version.new /root/version
