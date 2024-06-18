@@ -50,12 +50,12 @@ unpack /filesystem/boot/OGN-receiver.conf /boot/OGN-receiver.conf
 ### Step 8
 export OGNVERSION=$(head -1 "${HOME_DIR}"/rtlsdr-ogn/Changelog)
 
-envsubst < files/version > "${HOME_DIR}"/version
-chown 1000:1000 "${HOME_DIR}"/version
+unpack /filesystem/root/version /root/version
+envsubst < /root/version > /root/version.new && mv /root/version.new /root/version
 unpack /filesystem/etc/profile.d/ogn-receiver-status.sh /etc/profile.d/ogn-receiver-status.sh
 unpack /filesystem/usr/share/ogn-receiver-status /usr/share/ogn-receiver-status
 
 # Install firstboot.service and firstboot.sh
-install -v -m 0644 files/firstboot.service "${ROOTFS_DIR}"/lib/systemd/system/firstboot.service
-envsubst < files/firstboot.sh > "${ROOTFS_DIR}"/boot/firstboot.sh
-chmod +x "${ROOTFS_DIR}"/boot/firstboot.sh
+unpack /filesystem/firstboot.service /lib/systemd/system/firstboot.service
+unpack /filesystem/firstboot.sh /boot/firstboot.sh
+envsubst < /boot/firstboot.sh > /boot/firstboot.sh.new && mv /boot/firstboot.sh.new /boot/firstboot.sh

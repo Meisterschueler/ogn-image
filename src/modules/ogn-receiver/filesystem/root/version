@@ -1,0 +1,3 @@
+ImageVersion="IMAGEVERSION (installed INSTALLDATE)"
+RaspiOSversion="$IMG_FILENAME-$RELEASE-$ARCH"
+OGNversion="$OGNVERSION"
